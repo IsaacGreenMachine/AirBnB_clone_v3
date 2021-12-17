@@ -2,6 +2,7 @@
 '''Setup our Flask app'''
 from os import getenv
 from flask import Flask
+import flask
 from models import storage
 from api.v1.views import app_views
 """app module for RESTful interface"""
@@ -13,6 +14,12 @@ app.register_blueprint(app_views)
 def teardown_db(context):
     """closes the storage on teardown"""
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_found(err):
+    '''defines return on 404 error'''
+    return flask.jsonify({"error": "Not found"})
 
 
 if __name__ == "__main__":
