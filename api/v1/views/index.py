@@ -6,6 +6,7 @@ from models import storage
 import flask
 from api.v1.views import modelsDict
 
+
 @app_views.route('/status', strict_slashes=False)
 def okayThen():
     '''return json obj for status'''
