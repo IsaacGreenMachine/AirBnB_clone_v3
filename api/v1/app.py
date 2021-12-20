@@ -19,7 +19,7 @@ def teardown_db(context):
 @app.errorhandler(404)
 def page_not_found(err):
     '''defines return on 404 error'''
-    return flask.jsonify({"error": "Not found"})
+    return flask.make_response({"error": "Not found"}, 404)
 
 
 if __name__ == "__main__":
