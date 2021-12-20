@@ -59,7 +59,7 @@ def ct_post(id=None):
 
 
 @app_views.route('/cities/<id>', methods=['PUT'], strict_slashes=False)
-def st_put(id=None):
+def ct_put(id=None):
     '''update City by id, return updated City else 404 page'''
     try:
         storage.all()['City.' + id].to_dict()
