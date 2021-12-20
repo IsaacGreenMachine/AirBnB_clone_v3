@@ -69,6 +69,9 @@ test_file_storage.py'])
 
 
 class TestFileStorage(unittest.TestCase):
+    my_db = FileStorage()
+    my_db.reload()
+
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_all_returns_dict(self):
@@ -113,3 +116,34 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get(self):
+        """Test get method for db storage"""
+        my_st = State(name='test')
+        self.my_db.new(my_st)
+        self.my_db.save()
+        new_st = self.my_db.get(State, my_st.id)
+        self.assertAlmostEqual(new_st.created_at, my_st.created_at)
+        self.assertEqual(self.my_db.get(str, my_st.id), None)
+        self.assertEqual(self.my_db.get(State, 'invalid'), None)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_count(self):
+        """Test count method for db storage"""
+        self.assertEqual(self.my_db.count(),
+                         len(self.my_db.all()))
+        self.assertEqual(self.my_db.count(str),
+                         len(self.my_db.all(str)))
+        self.assertEqual(self.my_db.count(Amenity),
+                         len(self.my_db.all(Amenity)))
+        self.assertEqual(self.my_db.count(City),
+                         len(self.my_db.all(City)))
+        self.assertEqual(self.my_db.count(Place),
+                         len(self.my_db.all(Place)))
+        self.assertEqual(self.my_db.count(Review),
+                         len(self.my_db.all(Review)))
+        self.assertEqual(self.my_db.count(State),
+                         len(self.my_db.all(State)))
+        self.assertEqual(self.my_db.count(User),
+                         len(self.my_db.all(User)))
