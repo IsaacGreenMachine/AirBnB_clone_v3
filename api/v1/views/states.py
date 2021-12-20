@@ -1,4 +1,4 @@
-# must use obj.todict?
+#!/usr/bin/python3
 from api.v1.views import app_views, modelsDict
 from models import storage
 from datetime import datetime
