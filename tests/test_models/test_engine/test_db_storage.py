@@ -8,7 +8,7 @@ import inspect
 import models
 from models.engine import db_storage
 from models.amenity import Amenity
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -70,6 +70,9 @@ test_db_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
+    my_db = DBStorage()
+    my_db.reload()
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -81,8 +84,39 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
-        """test that new adds an object to the database"""
+        """Test that new adds an object to the database"""
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test get method for db storage"""
+        my_st = State(name='test')
+        self.my_db.new(my_st)
+        self.my_db.save()
+        new_st = self.my_db.get(State, my_st.id)
+        self.assertAlmostEqual(new_st.created_at, my_st.created_at)
+        self.assertEqual(self.my_db.get(str, my_st.id), None)
+        self.assertEqual(self.my_db.get(State, 'invalid'), None)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test count method for db storage"""
+        self.assertEqual(self.my_db.count(),
+                         len(self.my_db.all()))
+        self.assertEqual(self.my_db.count(str),
+                         len(self.my_db.all(str)))
+        self.assertEqual(self.my_db.count(Amenity),
+                         len(self.my_db.all(Amenity)))
+        self.assertEqual(self.my_db.count(City),
+                         len(self.my_db.all(City)))
+        self.assertEqual(self.my_db.count(Place),
+                         len(self.my_db.all(Place)))
+        self.assertEqual(self.my_db.count(Review),
+                         len(self.my_db.all(Review)))
+        self.assertEqual(self.my_db.count(State),
+                         len(self.my_db.all(State)))
+        self.assertEqual(self.my_db.count(User),
+                         len(self.my_db.all(User)))
