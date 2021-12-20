@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+'''handles api routes for State class'''
 from api.v1.views import app_views, modelsDict
 from models import storage
 from datetime import datetime
@@ -8,6 +9,9 @@ import flask
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 @app_views.route('/states/<id>', methods=['GET'], strict_slashes=False)
 def st_get(id=None):
+    '''return all states unless id present, then check id and return
+    single if present else 404 page
+    '''
     if id is None:
         return flask.jsonify([ob.to_dict() for ob in storage.all(
             modelsDict['states']).values()]
@@ -21,6 +25,7 @@ def st_get(id=None):
 
 @app_views.route('/states/<id>', methods=['DELETE'], strict_slashes=False)
 def st_del(id=None):
+    '''delete State by id, return blank json on success else 404 page'''
     if storage.get("State", id):
         storage.get('State', id).delete()
         storage.save()
@@ -31,6 +36,7 @@ def st_del(id=None):
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def st_post():
+    '''create State with input JSON'''
     new_st = flask.request.get_json()
     if not new_st:
         flask.abort(400, 'Not a JSON')
@@ -44,6 +50,7 @@ def st_post():
 
 @app_views.route('/states/<id>', methods=['PUT'], strict_slashes=False)
 def st_put(id=None):
+    '''update State by id, return updated State else 404 page'''
     try:
         storage.all()['State.' + id].to_dict()
     except Exception:
