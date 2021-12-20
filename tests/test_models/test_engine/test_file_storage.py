@@ -69,10 +69,10 @@ test_file_storage.py'])
 
 
 class TestFileStorage(unittest.TestCase):
+    """Test the FileStorage class"""
     my_db = FileStorage()
     my_db.reload()
 
-    """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_all_returns_dict(self):
         """Test that all returns the FileStorage.__objects attr"""
@@ -119,7 +119,7 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_get(self):
-        """Test get method for db storage"""
+        """Test get method for file storage"""
         my_st = State(name='test')
         self.my_db.new(my_st)
         self.my_db.save()
@@ -130,7 +130,7 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_count(self):
-        """Test count method for db storage"""
+        """Test count method for file storage"""
         self.assertEqual(self.my_db.count(),
                          len(self.my_db.all()))
         self.assertEqual(self.my_db.count(str),
