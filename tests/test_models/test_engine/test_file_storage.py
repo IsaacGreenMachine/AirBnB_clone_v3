@@ -70,8 +70,9 @@ test_file_storage.py'])
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
-    my_db = FileStorage()
-    my_db.reload()
+    if models.storage_t != 'db':
+        my_db = FileStorage()
+        my_db.reload()
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
     def test_all_returns_dict(self):
