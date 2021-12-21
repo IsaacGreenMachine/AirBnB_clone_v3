@@ -45,11 +45,12 @@ def pl_post(id=None):
     new_pl = flask.request.get_json()
     if not new_pl:
         flask.abort(400, 'Not a JSON')
-    if 'name' not in new_pl.keys():
-        flask.abort(400, 'Missing name')
     if 'user_id' not in new_pl.keys():
         flask.abort(400, 'Missing user_id')
-    if storage.get(modelsDict["cities"], id):
+    if 'name' not in new_pl.keys():
+        flask.abort(400, 'Missing name')
+    if (storage.get(modelsDict["cities"], id) and
+            storage.get('User', new_pl['user_id'])):
         new_pl.update({"state_id": id})
         pl = modelsDict['places'](**new_pl)
         storage.new(pl)
