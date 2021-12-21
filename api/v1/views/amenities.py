@@ -8,7 +8,7 @@ import flask
 
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
 @app_views.route('/amenities/<id>', methods=['GET'], strict_slashes=False)
-def st_get(id=None):
+def am_get(id=None):
     '''return all amenities unless id present, then check id and return
     single if present else 404 page
     '''
@@ -24,7 +24,7 @@ def st_get(id=None):
 
 
 @app_views.route('/amenities/<id>', methods=['DELETE'], strict_slashes=False)
-def st_del(id=None):
+def am_del(id=None):
     '''delete Amenity by id, return blank json on success else 404 page'''
     if storage.get("Amenity", id):
         storage.get('Amenity', id).delete()
@@ -35,7 +35,7 @@ def st_del(id=None):
 
 
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
-def st_post():
+def am_post():
     '''create Amenity with input JSON'''
     new_st = flask.request.get_json()
     if not new_st:
@@ -49,7 +49,7 @@ def st_post():
 
 
 @app_views.route('/amenities/<id>', methods=['PUT'], strict_slashes=False)
-def st_put(id=None):
+def am_put(id=None):
     '''update Amenity by id, return updated Amenity else 404 page'''
     try:
         storage.all()['Amenity.' + id].to_dict()
