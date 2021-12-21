@@ -37,12 +37,12 @@ def am_del(id=None):
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def am_post():
     '''create Amenity with input JSON'''
-    new_st = flask.request.get_json()
-    if not new_st:
+    new_am = flask.request.get_json()
+    if not new_am:
         flask.abort(400, 'Not a JSON')
-    if 'name' not in new_st.keys():
+    if 'name' not in new_am.keys():
         flask.abort(400, 'Missing name')
-    st = modelsDict['amenities'](**new_st)
+    st = modelsDict['amenities'](**new_am)
     storage.new(st)
     storage.save()
     return flask.make_response(st.to_dict(), 201)
@@ -55,15 +55,15 @@ def am_put(id=None):
         storage.all()['Amenity.' + id].to_dict()
     except Exception:
         flask.abort(404)
-    up_st = flask.request.get_json()
-    if not up_st:
+    up_am = flask.request.get_json()
+    if not up_am:
         flask.abort(400, 'Not a JSON')
-    for key in up_st:
+    for key in up_am:
         if key not in ['id', 'update_at', 'created_at']:
             setattr(
                 storage.all()['Amenity.' + id],
                 key,
-                up_st[key]
+                up_am[key]
             )
     # may cause checker issue because updated_at wasn't ignored
     setattr(
