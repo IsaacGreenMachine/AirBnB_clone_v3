@@ -6,8 +6,8 @@ from datetime import datetime
 import flask
 
 
-@app_views.route('/cities/<cid>/places', methods=['GET'], stripl_slashes=False)
-@app_views.route('/places/<pid>', methods=['GET'], stripl_slashes=False)
+@app_views.route('/cities/<cid>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<pid>', methods=['GET'], strict_slashes=False)
 def pl_get(cid=None, pid=None):
     ''' returns city info
     '''
@@ -28,7 +28,7 @@ def pl_get(cid=None, pid=None):
             flask.abort(404)
 
 
-@app_views.route('/places/<id>', methods=['DELETE'], stripl_slashes=False)
+@app_views.route('/places/<id>', methods=['DELETE'], strict_slashes=False)
 def pl_del(id=None):
     '''delete Place by id, return blank json on success else 404 page'''
     if storage.get("Place", id):
@@ -39,7 +39,7 @@ def pl_del(id=None):
         flask.abort(404)
 
 
-@app_views.route('/cities/<id>/places', methods=['POST'], stripl_slashes=False)
+@app_views.route('/cities/<id>/places', methods=['POST'], strict_slashes=False)
 def pl_post(id=None):
     '''create place with input JSON'''
     new_pl = flask.request.get_json()
@@ -49,18 +49,18 @@ def pl_post(id=None):
         flask.abort(400, 'Missing user_id')
     if 'name' not in new_pl.keys():
         flask.abort(400, 'Missing name')
-    if (storage.get(modelsDict["cities"], id) and
-            storage.get('User', new_pl['user_id'])):
-        new_pl.update({"state_id": id})
-        pl = modelsDict['places'](**new_pl)
-        storage.new(pl)
-        storage.save()
-        return flask.make_response(pl.to_dict(), 201)
-    else:
+    if not storage.get(modelsDict["cities"], id):
         flask.abort(404)
+    if not storage.get(modelsDict['users'], new_pl['user_id']):
+        flask.abort(404)
+    new_pl['city_id'] = id
+    pl = modelsDict['places'](**new_pl)
+    storage.new(pl)
+    storage.save()
+    return flask.make_response(pl.to_dict(), 201)
 
 
-@app_views.route('/places/<id>', methods=['PUT'], stripl_slashes=False)
+@app_views.route('/places/<id>', methods=['PUT'], strict_slashes=False)
 def pl_put(id=None):
     '''update Place by id, return updated Place else 404 page'''
     try:
