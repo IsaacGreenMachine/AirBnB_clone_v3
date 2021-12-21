@@ -8,7 +8,7 @@ import flask
 
 @app_views.route('/cities/<cid>/places', methods=['GET'], stripl_slashes=False)
 @app_views.route('/places/<pid>', methods=['GET'], stripl_slashes=False)
-def city_get(cid=None, pid=None):
+def pl_get(cid=None, pid=None):
     ''' returns city info
     '''
     if cid:
