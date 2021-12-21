@@ -40,8 +40,10 @@ def us_post():
     new_us = flask.request.get_json()
     if not new_us:
         flask.abort(400, 'Not a JSON')
-    if 'name' not in new_us.keys():
-        flask.abort(400, 'Missing name')
+    if 'email' not in new_us.keys():
+        flask.abort(400, 'Missing email')
+    if 'password' not in new_us.keys():
+        flask.abort(400, 'Missing password')
     st = modelsDict['users'](**new_us)
     storage.new(st)
     storage.save()
@@ -59,7 +61,7 @@ def us_put(id=None):
     if not up_us:
         flask.abort(400, 'Not a JSON')
     for key in up_us:
-        if key not in ['id', 'update_at', 'created_at']:
+        if key not in ['id', 'update_at', 'created_at', 'email']:
             setattr(
                 storage.all()['User.' + id],
                 key,
