@@ -42,10 +42,10 @@ def am_post():
         flask.abort(400, 'Not a JSON')
     if 'name' not in new_am.keys():
         flask.abort(400, 'Missing name')
-    st = modelsDict['amenities'](**new_am)
-    storage.new(st)
+    am = modelsDict['amenities'](**new_am)
+    storage.new(am)
     storage.save()
-    return flask.make_response(st.to_dict(), 201)
+    return flask.make_response(am.to_dict(), 201)
 
 
 @app_views.route('/amenities/<id>', methods=['PUT'], strict_slashes=False)

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 '''handles api routes for State class'''
-from flask.helpers import make_response
 from api.v1.views import app_views, modelsDict
 from models import storage
 from datetime import datetime
@@ -24,7 +23,7 @@ def city_get(sid=None, cid=None):
     if cid:
         city = storage.get(modelsDict["cities"], cid)
         if city:
-            return make_response(city.to_dict(), 200)
+            return flask.make_response(city.to_dict(), 200)
         else:
             flask.abort(404)
 

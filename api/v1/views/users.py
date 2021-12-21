@@ -44,10 +44,10 @@ def us_post():
         flask.abort(400, 'Missing email')
     if 'password' not in new_us.keys():
         flask.abort(400, 'Missing password')
-    st = modelsDict['users'](**new_us)
-    storage.new(st)
+    us = modelsDict['users'](**new_us)
+    storage.new(us)
     storage.save()
-    return flask.make_response(st.to_dict(), 201)
+    return flask.make_response(us.to_dict(), 201)
 
 
 @app_views.route('/users/<id>', methods=['PUT'], strict_slashes=False)
